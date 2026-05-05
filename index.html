@@ -196,72 +196,75 @@
         </footer>
     </div>
 
-    <!-- VIEW: LOGIN (With 3D Background) -->
-    <div id="login-view" class="view-section min-h-screen flex items-center justify-center p-4 relative" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
+    <!-- VIEW: LOGIN (With 3D Background & Centered Layout) -->
+    <div id="login-view" class="view-section hidden w-full h-screen relative bg-slate-900" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop'); background-size: cover; background-position: center;">
         <!-- Dark Blur Overlay -->
         <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm z-0"></div>
 
-        <!-- Form Container -->
-        <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl w-full max-w-md p-6 sm:p-8 relative z-10 border border-white/20">
-            <button onclick="showView('landing-view')" class="absolute top-5 left-5 text-gray-400 hover:text-gray-800 transition flex items-center gap-2 text-sm font-bold bg-gray-100/50 px-3 py-1.5 rounded-lg">
-                <i class="fa-solid fa-arrow-left"></i> Kembali
-            </button>
-            <div class="text-center mb-8 mt-10">
-                <div class="bg-gradient-to-br from-primary to-secondary text-white w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30">
-                    <i class="fa-solid fa-fingerprint text-3xl"></i>
-                </div>
-                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Otorisasi Akses</h1>
-                <p class="text-gray-500 text-sm mt-1 font-medium">Sistem Kearsipan Terpadu</p>
-            </div>
-            
-            <form id="login-form" onsubmit="handleLogin(event)">
-                <div class="mb-5">
-                    <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Login Sebagai</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-                            <i class="fa-solid fa-user-shield"></i>
-                        </span>
-                        <select id="login-role" class="w-full pl-12 pr-10 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary focus:bg-white outline-none transition appearance-none font-semibold text-gray-700" required>
-                            <option value="" disabled selected>-- Pilih Hak Akses --</option>
-                            <option value="Admin">Administrator Utama</option>
-                            <option value="Petugas">Petugas Arsip</option>
-                            <option value="User">User Eksekutif</option>
-                        </select>
-                        <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
-                            <i class="fa-solid fa-chevron-down text-xs"></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="mb-5">
-                    <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Username</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-                            <i class="fa-solid fa-user"></i>
-                        </span>
-                        <input type="text" id="login-username" class="w-full pl-12 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary focus:bg-white outline-none transition font-medium" placeholder="Masukkan ID pengguna" required>
-                    </div>
-                </div>
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Password</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-                            <i class="fa-solid fa-lock"></i>
-                        </span>
-                        <input type="password" id="login-password" class="w-full pl-12 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary focus:bg-white outline-none transition font-medium" placeholder="Masukkan kata sandi" required>
-                        <button type="button" onclick="togglePassword('login-password', 'login-eye')" class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-primary transition focus:outline-none">
-                            <i id="login-eye" class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-blue-800 hover:to-blue-600 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-900/25 flex justify-center items-center gap-2">
-                    Masuk ke Sistem <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <!-- Center Wrapper for Flexbox alignment -->
+        <div class="absolute inset-0 flex items-center justify-center p-4 z-10">
+            <!-- Form Container -->
+            <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl w-full max-w-md p-6 sm:p-8 relative border border-white/20">
+                <button onclick="showView('landing-view')" class="absolute top-5 left-5 text-gray-400 hover:text-gray-800 transition flex items-center gap-2 text-sm font-bold bg-gray-100/50 px-3 py-1.5 rounded-lg">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
                 </button>
-            </form>
+                <div class="text-center mb-8 mt-10">
+                    <div class="bg-gradient-to-br from-primary to-secondary text-white w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30">
+                        <i class="fa-solid fa-fingerprint text-3xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Otorisasi Akses</h1>
+                    <p class="text-gray-500 text-sm mt-1 font-medium">Sistem Kearsipan Terpadu</p>
+                </div>
+                
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="mb-5">
+                        <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Login Sebagai</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </span>
+                            <select id="login-role" class="w-full pl-12 pr-10 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary focus:bg-white outline-none transition appearance-none font-semibold text-gray-700" required>
+                                <option value="" disabled selected>-- Pilih Hak Akses --</option>
+                                <option value="Admin">Administrator Utama</option>
+                                <option value="Petugas">Petugas Arsip</option>
+                                <option value="User">User Eksekutif</option>
+                            </select>
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <input type="text" id="login-username" class="w-full pl-12 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary focus:bg-white outline-none transition font-medium" placeholder="Masukkan ID pengguna" required>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <label class="block text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="login-password" class="w-full pl-12 pr-12 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary focus:bg-white outline-none transition font-medium" placeholder="Masukkan kata sandi" required>
+                            <button type="button" onclick="togglePassword('login-password', 'login-eye')" class="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-primary transition focus:outline-none">
+                                <i id="login-eye" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-blue-800 hover:to-blue-600 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-900/25 flex justify-center items-center gap-2">
+                        Masuk ke Sistem <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- VIEW: APP MAIN LAYOUT -->
-    <div id="app-layout" class="view-section min-h-screen bg-gray-50 relative">
+    <div id="app-layout" class="view-section hidden min-h-screen bg-gray-50 relative">
         
         <!-- SIDEBAR (Desktop Only) -->
         <aside class="hidden md:flex flex-col w-64 bg-dark text-white fixed h-full z-20 shadow-2xl">
@@ -892,7 +895,7 @@
                 el.style.display = 'none';
             });
             const target = document.getElementById(viewId);
-            target.style.display = 'block';
+            target.style.display = viewId === 'login-view' ? 'flex' : 'block';
             setTimeout(() => target.classList.add('active'), 50);
         }
 
@@ -1342,7 +1345,6 @@
             document.getElementById('modal-user-title').innerText = 'Koreksi Data Staff';
             document.getElementById('modal-user').classList.remove('hidden');
         }
-        
         async function saveUser(e) {
             e.preventDefault();
             const payload = { 
