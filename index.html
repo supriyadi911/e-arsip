@@ -72,6 +72,37 @@
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed top-4 right-4 md:bottom-4 md:top-auto z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
+    <!-- POP-UP PENAWARAN (WHATSAPP) -->
+    <div id="promo-popup" class="fixed inset-0 bg-slate-900/70 z-[90] hidden items-center justify-center p-4 backdrop-blur-sm transition-all duration-300 opacity-0">
+        <div id="promo-popup-content" class="bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-8 relative transform scale-95 transition-all duration-300 border border-white/20">
+            <!-- Close Button -->
+            <button onclick="closePromoPopup()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-gray-100 text-gray-400 hover:text-gray-800 hover:bg-gray-200 transition flex items-center justify-center focus:outline-none">
+                <i class="fa-solid fa-times"></i>
+            </button>
+
+            <div class="text-center mt-2">
+                <!-- Icon Highlight -->
+                <div class="relative w-24 h-24 mx-auto mb-6">
+                    <div class="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-75"></div>
+                    <div class="relative w-24 h-24 bg-gradient-to-tr from-green-500 to-emerald-400 text-white rounded-full flex items-center justify-center text-5xl shadow-lg shadow-green-500/40">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                </div>
+                
+                <h3 class="text-2xl font-extrabold text-gray-900 mb-3 tracking-tight">Dapatkan Akses Penuh!</h3>
+                <p class="text-gray-500 mb-8 text-sm md:text-base leading-relaxed font-medium px-2">
+                    Tingkatkan efisiensi kearsipan instansi Anda sekarang. Hubungi <span class="font-bold text-gray-800">Bpk. Supriyadi</span> untuk mendapatkan akun premium <span class="font-bold text-primary">E-Arsip Pro</span>.
+                </p>
+                
+                <!-- WhatsApp CTA Button -->
+                <a href="https://wa.me/6282371962881?text=Saya%20tertarik%20menggunakan%20aplikasi%20E%20Arsip%20Pro" target="_blank" onclick="closePromoPopup()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 rounded-2xl transition shadow-xl shadow-green-500/30 flex justify-center items-center gap-3 text-lg transform hover:-translate-y-1">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i> Hubungi via WhatsApp
+                </a>
+                <p class="text-[10px] text-gray-400 mt-5 uppercase tracking-widest font-bold">Respon Cepat & Profesional</p>
+            </div>
+        </div>
+    </div>
+
     <!-- VIEW: LANDING PAGE -->
     <div id="landing-view" class="view-section active min-h-screen flex flex-col bg-white">
         <!-- Header -->
@@ -182,7 +213,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3 relative z-10">Siap Digunakan</h3>
                         <p class="text-blue-100 leading-relaxed text-sm relative z-10">Tingkatkan produktivitas instansi Anda mulai hari ini. Proses instalasi dan penggunaan dirancang sangat mudah dipahami oleh semua kalangan.</p>
-                        <button onclick="showView('login-view')" class="mt-6 px-4 py-2 bg-white text-primary text-sm font-bold rounded-lg shadow-sm hover:bg-gray-50 transition w-full">
+                        <button onclick="showView('login-view')" class="mt-6 px-4 py-2 bg-white text-primary text-sm font-bold rounded-lg shadow-sm hover:bg-gray-50 transition w-full relative z-10">
                             Login Sekarang
                         </button>
                     </div>
@@ -715,6 +746,7 @@
         let currentPage = 1;
         const perPage = 10;
         let autoRefreshTimer = null;
+        let promoPopupShown = false; // Mencegah popup muncul berkali-kali
 
         // ==========================================
         // INITIALIZATION & UTILS
@@ -728,9 +760,55 @@
                 navigate('dashboard');
             } else {
                 showView('landing-view');
+                
+                // Memicu Popup Penawaran setelah 5 detik
+                setTimeout(() => {
+                    // Hanya munculkan jika pengguna masih berada di halaman landing
+                    const landing = document.getElementById('landing-view');
+                    if (landing.classList.contains('active')) {
+                        showPromoPopup();
+                    }
+                }, 5000);
             }
         });
 
+        // FUNGSI POPUP PENAWARAN (WHATSAPP)
+        function showPromoPopup() {
+            if (promoPopupShown) return; // Jika sudah pernah muncul, jangan tampilkan lagi
+            
+            const popup = document.getElementById('promo-popup');
+            const content = document.getElementById('promo-popup-content');
+            
+            popup.classList.remove('hidden');
+            popup.classList.add('flex');
+            
+            // Trigger reflow untuk memastikan animasi CSS berjalan
+            void popup.offsetWidth;
+            
+            popup.classList.remove('opacity-0');
+            popup.classList.add('opacity-100');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+            
+            promoPopupShown = true;
+        }
+
+        function closePromoPopup() {
+            const popup = document.getElementById('promo-popup');
+            const content = document.getElementById('promo-popup-content');
+            
+            popup.classList.remove('opacity-100');
+            popup.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                popup.classList.remove('flex');
+                popup.classList.add('hidden');
+            }, 300); // Sinkron dengan durasi transisi Tailwind
+        }
+
+        // FUNGSI UMUM LAINNYA
         function showLoader(text = "Memproses data...") {
             document.getElementById('loader-text').innerText = text;
             document.getElementById('loader').classList.remove('hidden');
@@ -1224,24 +1302,20 @@
             if(currentReportData.length === 0) return showToast("Daftar tabel kosong, tidak dapat membuat PDF", "error");
 
             try {
-                // Initialize jsPDF (Landscape orientation for wide tables)
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('l', 'pt', 'a4'); 
 
-                // Header Document Title
                 doc.setFontSize(18);
                 doc.setFont("helvetica", "bold");
-                doc.setTextColor(30, 58, 138); // Primary color
+                doc.setTextColor(30, 58, 138);
                 doc.text("Laporan Rekapitulasi Arsip Digital", 40, 40);
 
-                // Subtitle / Period Label
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "normal");
-                doc.setTextColor(100, 116, 139); // Slate-500
+                doc.setTextColor(100, 116, 139);
                 const periodText = document.getElementById('report-period-label').innerText;
                 doc.text(periodText, 40, 55);
 
-                // Preparing Table Data
                 const headers = [['No', 'Nomor Registrasi', 'Judul Dokumen', 'Kategori', 'Tanggal', 'Status']];
                 const body = currentReportData.map((a, i) => [
                     i + 1,
@@ -1252,43 +1326,36 @@
                     a.status || '-'
                 ]);
 
-                // Generating Table via AutoTable
                 doc.autoTable({
                     head: headers,
                     body: body,
-                    startY: 70, // Start below titles
+                    startY: 70,
                     theme: 'grid',
                     headStyles: { fillColor: [30, 58, 138], textColor: 255, fontStyle: 'bold' },
                     styles: { 
                         fontSize: 9, 
                         cellPadding: 5, 
-                        overflow: 'linebreak' // Ensures long text wraps to new line (rapi & tidak terpotong)
+                        overflow: 'linebreak'
                     },
                     columnStyles: {
-                        0: { cellWidth: 30, halign: 'center' }, // No
-                        1: { cellWidth: 120 }, // No Registrasi
-                        2: { cellWidth: 'auto' }, // Judul (Takes remaining space dynamically)
-                        3: { cellWidth: 100 }, // Kategori
-                        4: { cellWidth: 100 }, // Tanggal
-                        5: { cellWidth: 60, halign: 'center' } // Status
+                        0: { cellWidth: 30, halign: 'center' },
+                        1: { cellWidth: 120 },
+                        2: { cellWidth: 'auto' },
+                        3: { cellWidth: 100 },
+                        4: { cellWidth: 100 },
+                        5: { cellWidth: 60, halign: 'center' }
                     },
                     didDrawPage: function (data) {
-                        // Footer Settings (Halaman & Tanggal Cetak)
                         let pageSize = doc.internal.pageSize;
                         let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
                         
                         doc.setFontSize(8);
                         doc.setTextColor(150);
-                        
-                        // Page Number (Left)
                         doc.text("Halaman " + doc.internal.getNumberOfPages(), data.settings.margin.left, pageHeight - 20);
-                        
-                        // Print Timestamp (Right)
                         doc.text("Dicetak pada: " + new Date().toLocaleString('id-ID'), pageSize.width - 200, pageHeight - 20);
                     }
                 });
 
-                // Trigger Download
                 doc.save(`Laporan_Arsip_${new Date().getTime()}.pdf`);
                 showToast("Laporan PDF berhasil diunduh");
 
@@ -1362,8 +1429,6 @@
                     showToast("Akun berhasil diperbarui!"); 
                     closeModal('modal-user'); 
                     
-                    // Jika admin mengedit dirinya sendiri (sedang login), 
-                    // beri notifikasi tambahan untuk relogin jika username/password diubah.
                     if (currentUser && currentUser.id === payload.id) {
                         showToast("Anda mengedit akun Anda sendiri. Perubahan akan sepenuhnya aktif pada login berikutnya.", "info");
                     }
